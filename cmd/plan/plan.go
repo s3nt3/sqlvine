@@ -52,6 +52,55 @@ func main() {
 			"type": "varchar"
 		}],
 		"indices": []
+	},{
+		"id": 2,
+		"name": "t2",
+		"charset": "utf8mb4",
+		"collate": "utf8mb4_bin",
+
+		"columns": [{
+			"id": 1,
+			"name": "c1",
+			"table": "t1",
+			"type": "int",
+			"primary_key": true
+		},{
+			"id": 2,
+			"name": "c2",
+			"table": "t1",
+			"type": "varchar"
+		},{
+			"id": 3,
+			"name": "c3",
+			"table": "t1",
+			"type": "varchar"
+		}],
+		"indices": []
+	},{
+		"id": 3,
+		"name": "t3",
+		"charset": "utf8mb4",
+		"collate": "utf8mb4_bin",
+
+		"columns": [{
+			"id": 1,
+			"name": "c1",
+			"table": "t1",
+			"type": "int",
+			"primary_key": true
+		},{
+			"id": 2,
+			"name": "c2",
+			"table": "t1",
+			"type": "varchar"
+		},{
+			"id": 3,
+			"name": "c3",
+			"table": "t1",
+			"type": "varchar"
+		}],
+		"indices": []
+
 	}]`)
 	builder := session.NewTiDBPlanBuilder(schema.GetSchemaInfo())
 	for _, stmt := range stmts {
@@ -66,7 +115,25 @@ func main() {
 
 func PrintLogicalPlan(plan core.LogicalPlan, level int) {
 	if plan != nil {
-		logger.L.Debugf("|%s%T", strings.Repeat("-", level), plan)
+		switch n := plan.(type) {
+		case *core.DataSource:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		case *core.LogicalAggregation:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		case *core.LogicalJoin:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		case *core.LogicalLimit:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		case *core.LogicalProjection:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		case *core.LogicalSelection:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		case *core.LogicalSort:
+			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
+		default:
+			logger.L.Panicf("`%T` not supported\n", n)
+		}
+
 		for _, p := range plan.Children() {
 			PrintLogicalPlan(p, level+1)
 		}
