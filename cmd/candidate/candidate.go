@@ -43,7 +43,7 @@ func main() {
 		}
 
 		for idx, stmt := range candidate.CandidateStmts {
-			sql, err := stmt.GetStmt().Restore()
+			sql, err := stmt.GetNode().Restore()
 			if err != nil {
 				logger.L.Panic(err.Error())
 			} else {

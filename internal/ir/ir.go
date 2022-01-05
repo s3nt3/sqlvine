@@ -61,7 +61,7 @@ func (n *MutNode) Restore() (string, error) {
 }
 
 type MutStmt struct {
-	stmt *MutNode
+	node *MutNode
 	path []*MutNode
 
 	parent *MutStmt
@@ -70,7 +70,7 @@ type MutStmt struct {
 
 func NewMutStmt(node *MutNode) *MutStmt {
 	stmt := &MutStmt{
-		stmt: node,
+		node: node,
 		path: []*MutNode{},
 	}
 	stmt.Push(node)
@@ -92,8 +92,8 @@ func (s *MutStmt) GetPath() []*MutNode {
 	return s.path
 }
 
-func (s *MutStmt) GetStmt() *MutNode {
-	return s.stmt
+func (s *MutStmt) GetNode() *MutNode {
+	return s.node
 }
 
 func (s *MutStmt) GetDepth() int {
