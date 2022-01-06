@@ -61,6 +61,10 @@ func (v *MutationCandidate) Leave(in ast.Node) (out ast.Node, ok bool) {
 func (v *MutationCandidate) addCandidate(node *ir.MutNode) {
 	switch node.Node.(type) {
 	case *ast.SelectStmt:
+		v.addCandidateNode(node)
+	}
+
+	if _, ok := node.Node.(ast.StmtNode); ok {
 		v.addCandidateStmt(node)
 	}
 }
