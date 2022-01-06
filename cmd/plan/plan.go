@@ -44,12 +44,14 @@ func main() {
 			"id": 2,
 			"name": "c2",
 			"table": "t1",
-			"type": "varchar"
+			"type": "varchar",
+			"size": 100
 		},{
 			"id": 3,
 			"name": "c3",
 			"table": "t1",
-			"type": "varchar"
+			"type": "varchar",
+			"size": 100
 		}],
 		"indices": []
 	},{
@@ -68,12 +70,14 @@ func main() {
 			"id": 2,
 			"name": "c2",
 			"table": "t1",
-			"type": "varchar"
+			"type": "varchar",
+			"size": 100
 		},{
 			"id": 3,
 			"name": "c3",
 			"table": "t1",
-			"type": "varchar"
+			"type": "varchar",
+			"size": 100
 		}],
 		"indices": []
 	},{
@@ -92,12 +96,14 @@ func main() {
 			"id": 2,
 			"name": "c2",
 			"table": "t1",
-			"type": "varchar"
+			"type": "varchar",
+			"size": 100
 		},{
 			"id": 3,
 			"name": "c3",
 			"table": "t1",
-			"type": "varchar"
+			"type": "varchar",
+			"size": 100
 		}],
 		"indices": []
 
