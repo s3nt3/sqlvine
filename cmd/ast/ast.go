@@ -7,7 +7,7 @@ import (
 	"github.com/pingcap/tidb/parser/ast"
 
 	"github.com/s3nt3/sqlvine/internal/logger"
-	"github.com/s3nt3/sqlvine/internal/session"
+	"github.com/s3nt3/sqlvine/pkg/parser"
 )
 
 var (
@@ -47,7 +47,7 @@ func (v *visitor) Leave(in ast.Node) (out ast.Node, ok bool) {
 func main() {
 	flag.Parse()
 
-	parser := session.NewTiDBParser()
+	parser := parser.NewTiDBParser()
 	stmts, warns, err := parser.Parse([]byte(*opt_sql))
 	if err != nil {
 		logger.L.Panic(err.Error())

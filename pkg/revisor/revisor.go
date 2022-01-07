@@ -3,18 +3,18 @@ package revisor
 import (
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/s3nt3/sqlvine/internal/ir"
-	"github.com/s3nt3/sqlvine/internal/session"
+	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
 type Revisor struct {
-	schema         *session.Schema
+	schema         *schema.Schema
 	tree           *ir.RevTree
 	CandidateNodes []*ir.RevNode
 	CandidateStmts []*ir.RevStmt
 	err            error
 }
 
-func NewRevisor(schema *session.Schema) *Revisor {
+func NewRevisor(schema *schema.Schema) *Revisor {
 	return &Revisor{
 		schema:         schema,
 		CandidateNodes: []*ir.RevNode{},

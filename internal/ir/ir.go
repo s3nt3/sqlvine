@@ -6,6 +6,7 @@ import (
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/pingcap/tidb/parser/format"
 	"github.com/s3nt3/sqlvine/internal/session"
+	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
 type MutNode struct {
@@ -262,7 +263,7 @@ func NewRevStmt(node *RevNode) *RevStmt {
 	stmt := &RevStmt{
 		node:   node,
 		path:   []*RevNode{},
-		schema: session.NewSchema("[]"),
+		schema: schema.NewSchema("[]"),
 	}
 	stmt.Push(node)
 

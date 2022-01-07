@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/s3nt3/sqlvine/internal/logger"
-	"github.com/s3nt3/sqlvine/internal/session"
 	"github.com/s3nt3/sqlvine/pkg/mutator"
+	"github.com/s3nt3/sqlvine/pkg/parser"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 func main() {
 	flag.Parse()
 
-	parser := session.NewTiDBParser()
+	parser := parser.NewTiDBParser()
 	stmts, warns, err := parser.Parse([]byte(*opt_sql))
 	if err != nil {
 		logger.L.Panic(err.Error())

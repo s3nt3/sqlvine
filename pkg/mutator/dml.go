@@ -10,6 +10,10 @@ func (m *Mutator) mutateSelectStmt(node *ir.MutNode) {
 	switch node.Node.(type) {
 	case *ast.SelectStmt:
 		m.MutateSelectStmtNode(node)
+	case *ast.FieldList:
+		m.MutateFieldList(node)
+	case *ast.SelectField:
+		m.MutateSelectField(node)
 	}
 }
 
@@ -51,4 +55,25 @@ func (m *Mutator) MutateSelectStmtNode(node *ir.MutNode) {
 			stmt.GroupBy = nil
 		}
 	}
+}
+
+func (m *Mutator) MutateFieldList(node *ir.MutNode) {
+	list := node.Node.(*ast.FieldList)
+
+	idx := m.RandomNum(len(list.Fields))
+	switch m.RandomNum(2) {
+	case 0:
+		for i := 0; i < idx; i++ {
+			list.Fields = append(list.Fields, generator.NewASTGenerator().SelectField())
+		}
+	case 1:
+		if len(list.Fields) > 0 {
+			list.Fields = append(list.Fields[:idx], list.Fields[idx+1:]...)
+		}
+	}
+}
+
+func (m *Mutator) MutateSelectField(node *ir.MutNode) {
+	field := node.Node.(*ast.SelectField)
+	field.Expr = generator.NewASTGenerator().ExprNode(true)
 }

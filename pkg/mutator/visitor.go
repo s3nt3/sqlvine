@@ -62,6 +62,10 @@ func (v *MutationCandidate) addCandidate(node *ir.MutNode) {
 	switch node.Node.(type) {
 	case *ast.SelectStmt:
 		v.addCandidateNode(node)
+	case *ast.FieldList:
+		v.addCandidateNode(node)
+	case *ast.SelectField:
+		v.addCandidateNode(node)
 	}
 
 	if _, ok := node.Node.(ast.StmtNode); ok {

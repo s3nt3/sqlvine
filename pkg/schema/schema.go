@@ -1,4 +1,4 @@
-package session
+package schema
 
 import (
 	"encoding/json"

@@ -7,6 +7,8 @@ import (
 	"github.com/pingcap/tidb/planner/core"
 	"github.com/s3nt3/sqlvine/internal/logger"
 	"github.com/s3nt3/sqlvine/internal/session"
+	"github.com/s3nt3/sqlvine/pkg/parser"
+	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
 var (
@@ -16,7 +18,7 @@ var (
 func main() {
 	flag.Parse()
 
-	parser := session.NewTiDBParser()
+	parser := parser.NewTiDBParser()
 	stmts, warns, err := parser.Parse([]byte(*opt_sql))
 	if err != nil {
 		logger.L.Panic(err.Error())
@@ -28,7 +30,7 @@ func main() {
 		}
 	}
 
-	schema := session.NewSchema(`[{
+	schema := schema.NewSchema(`[{
 		"id": 1,
 		"name": "t1",
 		"charset": "utf8mb4",
