@@ -5,7 +5,6 @@ import (
 
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/pingcap/tidb/parser/format"
-	"github.com/s3nt3/sqlvine/internal/session"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
@@ -254,7 +253,7 @@ type RevStmt struct {
 	parent   *RevStmt
 	children []*RevStmt
 	members  []*RevNode
-	schema   *session.Schema
+	schema   *schema.Schema
 	Walked   bool
 	depth    int
 }
@@ -282,7 +281,7 @@ func (n *RevStmt) addMember(member *RevNode) {
 	}
 }
 
-func (s *RevStmt) GetSchema() *session.Schema {
+func (s *RevStmt) GetSchema() *schema.Schema {
 	return s.schema
 }
 

@@ -4,7 +4,6 @@ import (
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/s3nt3/sqlvine/internal/ir"
 	"github.com/s3nt3/sqlvine/internal/util"
-	"github.com/s3nt3/sqlvine/pkg/parser"
 	"github.com/s3nt3/sqlvine/pkg/revisor"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )
@@ -13,21 +12,16 @@ type Mutator struct {
 	Mutated int
 
 	Candidate *MutationCandidate
-	Parser    *parser.TiDBParser
 	Revisor   *revisor.Revisor
-	Schema    *schema.Schema
 
 	*util.Random
 }
 
-func NewMutator(s string) *Mutator {
-	schema := schema.NewSchema(s)
+func NewMutator(schema *schema.Schema) *Mutator {
 	return &Mutator{
-		Candidate: NewMutationCandidate(),
 		Random:    util.NewRandom(),
-		Parser:    parser.NewTiDBParser(),
+		Candidate: NewMutationCandidate(),
 		Revisor:   revisor.NewRevisor(schema),
-		Schema:    schema,
 	}
 }
 
