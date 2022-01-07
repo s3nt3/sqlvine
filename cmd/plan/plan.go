@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/pingcap/tidb/planner/core"
-	"github.com/s3nt3/sqlvine/internal/logger"
 	"github.com/s3nt3/sqlvine/internal/session"
+	"github.com/s3nt3/sqlvine/pkg/logger"
 	"github.com/s3nt3/sqlvine/pkg/parser"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )

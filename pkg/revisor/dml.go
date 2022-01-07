@@ -7,8 +7,8 @@ import (
 	"github.com/pingcap/tidb/parser/model"
 	driver "github.com/pingcap/tidb/types/parser_driver"
 	"github.com/s3nt3/sqlvine/internal/ir"
-	"github.com/s3nt3/sqlvine/internal/logger"
 	"github.com/s3nt3/sqlvine/pkg/generator"
+	"github.com/s3nt3/sqlvine/pkg/logger"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 

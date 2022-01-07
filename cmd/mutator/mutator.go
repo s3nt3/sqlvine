@@ -4,7 +4,7 @@ import (
 	"flag"
 
 	"github.com/pingcap/tidb/parser/ast"
-	"github.com/s3nt3/sqlvine/internal/logger"
+	"github.com/s3nt3/sqlvine/pkg/logger"
 	"github.com/s3nt3/sqlvine/pkg/mutator"
 	"github.com/s3nt3/sqlvine/pkg/parser"
 	"github.com/s3nt3/sqlvine/pkg/schema"

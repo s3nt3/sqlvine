@@ -15,7 +15,7 @@ import (
 	"github.com/pingcap/tidb/store/mockstore"
 	"github.com/pingcap/tidb/types"
 	"github.com/pingcap/tidb/util/mock"
-	"github.com/s3nt3/sqlvine/internal/logger"
+	"github.com/s3nt3/sqlvine/pkg/logger"
 )
 
 func init() {

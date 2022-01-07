@@ -8,8 +8,8 @@ import (
 	"github.com/pingcap/tidb/parser/model"
 	"github.com/pingcap/tidb/parser/mysql"
 	"github.com/pingcap/tidb/types"
-	"github.com/s3nt3/sqlvine/internal/logger"
 	"github.com/s3nt3/sqlvine/internal/util"
+	"github.com/s3nt3/sqlvine/pkg/logger"
 )
 
 type INT64 int64
