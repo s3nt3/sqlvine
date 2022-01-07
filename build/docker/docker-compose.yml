@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+    sqlvine:
+        build: .
+        image: sqlvine:latest
+        container_name: "sqlvine"
+        volumes:
+          - "./testcase:/home/sqlvine/testcase"
+        working_dir: "/home/sqlvine/"
+        security_opt:
+          - apparmor:unconfined
+          - seccomp:unconfined
+        cap_add:
+          - SYS_PTRACE
+        deploy:
+          resources:
+            limits:
+              cpus: '16.0'
