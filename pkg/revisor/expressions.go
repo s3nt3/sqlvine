@@ -1,6 +1,8 @@
 package revisor
 
 import (
+	"log"
+
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/pingcap/tidb/parser/model"
 	"github.com/pingcap/tidb/types"
@@ -9,7 +11,6 @@ import (
 
 	"github.com/s3nt3/sqlvine/internal/ir"
 	"github.com/s3nt3/sqlvine/pkg/generator"
-	"github.com/s3nt3/sqlvine/pkg/logger"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
@@ -26,7 +27,7 @@ func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*schema.Table, column 
 	case *driver.ValueExpr:
 		v.walkValueExpr(node, column)
 	default:
-		logger.L.Panicf("Expr `%T` not supported", node.Node)
+		log.Fatalf("Expr `%T` not supported", node.Node)
 	}
 
 	return column
@@ -84,7 +85,7 @@ func (v *Revisor) walkSubqueryExpr(node *ir.RevNode) *schema.Table {
 	case *ast.SelectStmt:
 		return v.walkFrom(node.GetChildByNodePtr(expr.Query))
 	default:
-		logger.L.Panicf("Stmt `%T` not supported in SubqueryExpr", node.Node)
+		log.Fatalf("Stmt `%T` not supported in SubqueryExpr", node.Node)
 	}
 
 	return nil

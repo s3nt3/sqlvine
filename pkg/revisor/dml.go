@@ -2,13 +2,13 @@ package revisor
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/pingcap/tidb/parser/model"
 	driver "github.com/pingcap/tidb/types/parser_driver"
 	"github.com/s3nt3/sqlvine/internal/ir"
 	"github.com/s3nt3/sqlvine/pkg/generator"
-	"github.com/s3nt3/sqlvine/pkg/logger"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
@@ -165,7 +165,7 @@ func (v *Revisor) walkTableName(node *ir.RevNode) *schema.Table {
 	if table != nil {
 		tableName.Name = model.NewCIStr(table.Name)
 	} else {
-		logger.L.Panic("Globle schema is empty: %+v", v.schema)
+		log.Fatalf("Globle schema is empty: %+v", v.schema)
 	}
 
 	return table

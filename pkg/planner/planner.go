@@ -3,6 +3,7 @@ package planner
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/pingcap/tidb/domain"
@@ -15,7 +16,6 @@ import (
 	"github.com/pingcap/tidb/store/mockstore"
 	"github.com/pingcap/tidb/types"
 	"github.com/pingcap/tidb/util/mock"
-	"github.com/s3nt3/sqlvine/pkg/logger"
 )
 
 func init() {
@@ -36,7 +36,7 @@ func sessionCtx() sessionctx.Context {
 	driver := mockstore.MockTiKVDriver{}
 	kvstore, err := driver.Open("mocktikv:///tmp/mock/tikv")
 	if err != nil {
-		logger.L.Panic(err.Error())
+		log.Fatal(err.Error())
 	}
 	ctx.Store = kvstore
 
