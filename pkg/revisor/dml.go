@@ -8,7 +8,6 @@ import (
 	driver "github.com/pingcap/tidb/types/parser_driver"
 	"github.com/s3nt3/sqlvine/internal/ir"
 	"github.com/s3nt3/sqlvine/internal/logger"
-	"github.com/s3nt3/sqlvine/internal/session"
 	"github.com/s3nt3/sqlvine/pkg/generator"
 	"github.com/s3nt3/sqlvine/pkg/schema"
 )
@@ -121,10 +120,10 @@ func (v *Revisor) walkJoin(node *ir.RevNode) *schema.Table {
 			}
 
 			stmt := node.GetStmt()
-			schema := stmt.GetSchema()
+			s := stmt.GetSchema()
 
-			table := session.MergeTable(ltable, rtable)
-			table.SetID(int64(stmt.GetDepth()*10000 + len(v.schema.TableVec)*1000 + len(schema.TableVec)))
+			table := schema.MergeTable(ltable, rtable)
+			table.SetID(int64(stmt.GetDepth()*10000 + len(v.schema.TableVec)*1000 + len(s.TableVec)))
 			table.ReName(fmt.Sprintf("t%d", table.ID))
 
 			return table
