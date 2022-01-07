@@ -10,12 +10,8 @@ var (
 )
 
 func init() {
-	// cfg := zap.NewProductionConfig()
-	cfg := zap.NewDevelopmentConfig()
-	cfg.OutputPaths = []string{
-		"/tmp/sqlvine/sqlvine.log",
-	}
-	logger, _ := cfg.Build()
+	// logger, _ := zap.NewProduction()
+	logger, _ := zap.NewDevelopment()
 	logger.Sync()
 	L = logger.Sugar()
 }
