@@ -25,6 +25,8 @@ func (v *visitor) Enter(in ast.Node) (out ast.Node, skipChildren bool) {
 		logger.L.Debugf("%s - %T %+v", strings.Repeat(" ", v.level), in, in)
 	} else {
 		switch in.(type) {
+		case *ast.AggregateFuncExpr:
+			logger.L.Debugf("%s - %T %+v", strings.Repeat(" ", v.level), in, in)
 		case *ast.SubqueryExpr:
 			logger.L.Debugf("%s - %T %+v", strings.Repeat(" ", v.level), in, in)
 		case *ast.TableName:

@@ -51,8 +51,6 @@ func (m *Mutator) MutateSelectStmtNode(node *ir.MutNode) {
 			stmt.OrderBy = nil
 		case stmt.Having != nil:
 			stmt.Having = nil
-		case stmt.GroupBy != nil:
-			stmt.GroupBy = nil
 		}
 	}
 }
@@ -60,13 +58,14 @@ func (m *Mutator) MutateSelectStmtNode(node *ir.MutNode) {
 func (m *Mutator) MutateFieldList(node *ir.MutNode) {
 	list := node.Node.(*ast.FieldList)
 
-	idx := m.RandomNum(len(list.Fields))
 	switch m.RandomNum(2) {
 	case 0:
-		for i := 0; i < idx; i++ {
+		len := m.RandomNum(16/len(list.Fields) + 1)
+		for i := 0; i < len; i++ {
 			list.Fields = append(list.Fields, generator.NewASTGenerator().SelectField())
 		}
 	case 1:
+		idx := m.RandomNum(len(list.Fields))
 		if len(list.Fields) > 0 {
 			list.Fields = append(list.Fields[:idx], list.Fields[idx+1:]...)
 		}
@@ -75,5 +74,18 @@ func (m *Mutator) MutateFieldList(node *ir.MutNode) {
 
 func (m *Mutator) MutateSelectField(node *ir.MutNode) {
 	field := node.Node.(*ast.SelectField)
-	field.Expr = generator.NewASTGenerator().ExprNode(true)
+	stmt := node.GetStmt().GetNode().Node.(*ast.SelectStmt)
+
+	if stmt.GroupBy != nil {
+		if _, ok := field.Expr.(*ast.ColumnNameExpr); ok {
+			switch m.RandomNum(3) {
+			case 0:
+				field.Expr = generator.NewASTGenerator().ExprNode(true)
+			default:
+				field.Expr = generator.NewASTGenerator().AggregateFuncExpr()
+			}
+		}
+	} else {
+		field.Expr = generator.NewASTGenerator().ExprNode(true)
+	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/s3nt3/sqlvine/internal/logger"
 	"github.com/s3nt3/sqlvine/pkg/mutator"
 	"github.com/s3nt3/sqlvine/pkg/parser"
+	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
 var (
@@ -31,7 +32,7 @@ func parse(sql string) []ast.StmtNode {
 }
 
 func mutate(stmt ast.StmtNode) string {
-	m := mutator.NewMutator(`[{
+	s := schema.NewSchema(`[{
 		"id": 1,
 		"name": "t1",
 		"charset": "utf8mb4",
@@ -55,6 +56,11 @@ func mutate(stmt ast.StmtNode) string {
 			"table": "t1",
 			"type": "varchar",
 			"size": 100
+		},{
+			"id": 4,
+			"name": "c4",
+			"table": "t1",
+			"type": "timestamp"
 		}],
 		"indices": []
 	},{
@@ -111,6 +117,8 @@ func mutate(stmt ast.StmtNode) string {
 		"indices": []
 
 	}]`)
+
+	m := mutator.NewMutator(s)
 
 	stmt.Accept(m.Candidate)
 

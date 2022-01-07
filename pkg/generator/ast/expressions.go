@@ -62,20 +62,18 @@ func (g *ASTGenerator) ValueExpr() ast.ExprNode {
 }
 
 func (g *ASTGenerator) ExprNode(column bool) ast.ExprNode {
-	if column {
-		if g.RandomBool() {
-			return g.SubqueryExpr()
-		} else {
+	if g.RandomNum(10) > 0 {
+		if column {
 			return g.ColumnNameExpr()
+		} else {
+			switch g.RandomNum(3) {
+			case 0:
+				return g.ValueExpr()
+			default:
+				return g.ColumnNameExpr()
+			}
 		}
-	}
-
-	switch g.RandomNum(3) {
-	case 0:
-		return g.ValueExpr()
-	case 1:
+	} else {
 		return g.SubqueryExpr()
-	default:
-		return g.ColumnNameExpr()
 	}
 }

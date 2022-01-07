@@ -41,11 +41,29 @@ func (g *ValueGenerator) newRandomString(len int) (str string) {
 }
 
 func (g *ValueGenerator) NewString() string {
-	return strings.ToUpper(g.newRandomString(g.RandomNum(1024)))
+	switch g.RandomNum(64) {
+	case 0:
+		return strings.ToUpper(g.newRandomString(g.RandomNum(1024)))
+	case 1:
+		return strings.ToUpper(g.newRandomString(g.RandomNum(512)))
+	case 2:
+		return strings.ToUpper(g.newRandomString(g.RandomNum(256)))
+	default:
+		return strings.ToUpper(g.newRandomString(g.RandomNum(8)))
+	}
 }
 
 func (g *ValueGenerator) NewInt() int64 {
-	return g.RandomInt63()
+	switch g.RandomNum(64) {
+	case 0:
+		return g.RandomInt63()
+	case 1:
+		return g.RandomInt63n(int64(2147483648))
+	case 2:
+		return int64(g.RandomNum(65536))
+	default:
+		return int64(g.RandomRange(0, 1024))
+	}
 }
 
 func (g *ValueGenerator) NewFloat() float64 {

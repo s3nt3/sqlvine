@@ -15,6 +15,8 @@ import (
 
 func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*schema.Table, column *schema.Column) *schema.Column {
 	switch node.Node.(type) {
+	case *ast.AggregateFuncExpr:
+		v.walkAggregateFuncExpr(node, tables, column)
 	case *ast.BinaryOperationExpr:
 		v.walkBinaryOperationExpr(node, tables)
 	case *ast.ColumnNameExpr:
@@ -30,7 +32,7 @@ func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*schema.Table, column 
 	return column
 }
 
-func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*schema.Table) {
+func (v *Revisor) randomColumn(node *ir.RevNode, tables []*schema.Table) *schema.Column {
 	var table *schema.Table
 
 	if len(tables) > 0 {
@@ -44,6 +46,13 @@ func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*schema.Tab
 	}
 
 	column := table.GetRandomColumn()
+
+	return column
+}
+
+func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*schema.Table) {
+	column := v.randomColumn(node, tables)
+
 	expr := node.Node.(*ast.BinaryOperationExpr)
 	v.walkExprNode(node.GetChildByNodePtr(expr.L), tables, v.walkExprNode(
 		node.GetChildByNodePtr(expr.R), tables, column,
@@ -51,19 +60,7 @@ func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*schema.Tab
 }
 
 func (v *Revisor) walkColumnNameExpr(node *ir.RevNode, tables []*schema.Table) *schema.Column {
-	var table *schema.Table
-
-	if len(tables) > 0 {
-		table = tables[v.schema.RandomNum(len(tables))]
-	} else {
-		table = node.GetStmt().GetSchema().GetRandomTable()
-	}
-
-	if table == nil {
-		table = v.schema.GetRandomTable()
-	}
-
-	column := table.GetRandomColumn()
+	column := v.randomColumn(node, tables)
 
 	expr := node.Node.(*ast.ColumnNameExpr)
 	expr.Name = &ast.ColumnName{
@@ -72,6 +69,13 @@ func (v *Revisor) walkColumnNameExpr(node *ir.RevNode, tables []*schema.Table) *
 	}
 
 	return column
+}
+
+func (v *Revisor) walkAggregateFuncExpr(node *ir.RevNode, tables []*schema.Table, column *schema.Column) {
+	funcExpr := node.Node.(*ast.AggregateFuncExpr)
+	for _, expr := range funcExpr.Args {
+		v.walkExprNode(node.GetChildByNodePtr(expr), tables, column)
+	}
 }
 
 func (v *Revisor) walkSubqueryExpr(node *ir.RevNode) *schema.Table {
