@@ -24,7 +24,7 @@ func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*schema.Table, column 
 	case *driver.ValueExpr:
 		v.walkValueExpr(node, column)
 	default:
-		logger.L.Panicf("Expr type `%T` not supported", node.Node)
+		logger.L.Panicf("Expr `%T` not supported", node.Node)
 	}
 
 	return column

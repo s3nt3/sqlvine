@@ -139,7 +139,7 @@ func PrintLogicalPlan(plan core.LogicalPlan, level int) {
 		case *core.LogicalSort:
 			logger.L.Debugf("%s|-%T", strings.Repeat("\t", level), plan)
 		default:
-			logger.L.Panicf("`%T` not supported\n", n)
+			logger.L.Panicf("`%T` not supported", n)
 		}
 
 		for _, p := range plan.Children() {
