@@ -9,20 +9,24 @@ import (
 )
 
 type Mutator struct {
-	Candidate *MutationCandidate
-
 	Mutated int
 
-	revisor *revisor.Revisor
+	Candidate *MutationCandidate
+	Parser    *session.TiDBParser
+	Revisor   *revisor.Revisor
+	Schema    *session.Schema
 
 	*util.Random
 }
 
-func NewMutator(schema *session.Schema) *Mutator {
+func NewMutator(schema string) *Mutator {
+	s := session.NewSchema(schema)
 	return &Mutator{
 		Candidate: NewMutationCandidate(),
 		Random:    util.NewRandom(),
-		revisor:   revisor.NewRevisor(schema),
+		Parser:    session.NewTiDBParser(),
+		Revisor:   revisor.NewRevisor(s),
+		Schema:    s,
 	}
 }
 
@@ -63,7 +67,7 @@ func (m *Mutator) Mutate() {
 		}
 	}
 
-	m.Candidate.GetTree().GetRoot().GetNode().Node.Accept(m.revisor)
+	m.Candidate.GetTree().GetRoot().GetNode().Node.Accept(m.Revisor)
 }
 
 func (m *Mutator) MutateNode(node *ir.MutNode) {

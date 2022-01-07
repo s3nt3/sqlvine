@@ -31,7 +31,7 @@ func parse(sql string) []ast.StmtNode {
 }
 
 func mutate(stmt ast.StmtNode) string {
-	m := mutator.NewMutator(session.NewSchema(`[{
+	m := mutator.NewMutator(`[{
 		"id": 1,
 		"name": "t1",
 		"charset": "utf8mb4",
@@ -110,7 +110,7 @@ func mutate(stmt ast.StmtNode) string {
 		}],
 		"indices": []
 
-	}]`))
+	}]`)
 
 	stmt.Accept(m.Candidate)
 
