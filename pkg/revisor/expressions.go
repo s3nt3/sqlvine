@@ -9,11 +9,11 @@ import (
 
 	"github.com/s3nt3/sqlvine/internal/ir"
 	"github.com/s3nt3/sqlvine/internal/logger"
-	"github.com/s3nt3/sqlvine/internal/session"
 	"github.com/s3nt3/sqlvine/pkg/generator"
+	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
-func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*session.Table, column *session.Column) *session.Column {
+func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*schema.Table, column *schema.Column) *schema.Column {
 	switch node.Node.(type) {
 	case *ast.BinaryOperationExpr:
 		v.walkBinaryOperationExpr(node, tables)
@@ -30,8 +30,8 @@ func (v *Revisor) walkExprNode(node *ir.RevNode, tables []*session.Table, column
 	return column
 }
 
-func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*session.Table) {
-	var table *session.Table
+func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*schema.Table) {
+	var table *schema.Table
 
 	if len(tables) > 0 {
 		table = tables[v.schema.RandomNum(len(tables))]
@@ -50,8 +50,8 @@ func (v *Revisor) walkBinaryOperationExpr(node *ir.RevNode, tables []*session.Ta
 	))
 }
 
-func (v *Revisor) walkColumnNameExpr(node *ir.RevNode, tables []*session.Table) *session.Column {
-	var table *session.Table
+func (v *Revisor) walkColumnNameExpr(node *ir.RevNode, tables []*schema.Table) *schema.Column {
+	var table *schema.Table
 
 	if len(tables) > 0 {
 		table = tables[v.schema.RandomNum(len(tables))]
@@ -74,7 +74,7 @@ func (v *Revisor) walkColumnNameExpr(node *ir.RevNode, tables []*session.Table) 
 	return column
 }
 
-func (v *Revisor) walkSubqueryExpr(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkSubqueryExpr(node *ir.RevNode) *schema.Table {
 	expr := node.Node.(*ast.SubqueryExpr)
 	switch expr.Query.(type) {
 	case *ast.SelectStmt:
@@ -86,7 +86,7 @@ func (v *Revisor) walkSubqueryExpr(node *ir.RevNode) *session.Table {
 	return nil
 }
 
-func (v *Revisor) walkValueExpr(node *ir.RevNode, column *session.Column) {
+func (v *Revisor) walkValueExpr(node *ir.RevNode, column *schema.Column) {
 	expr := node.Node.(*driver.ValueExpr)
 	if column != nil {
 		g := generator.NewValueGenerator()

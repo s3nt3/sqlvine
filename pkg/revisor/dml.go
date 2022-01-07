@@ -10,6 +10,7 @@ import (
 	"github.com/s3nt3/sqlvine/internal/logger"
 	"github.com/s3nt3/sqlvine/internal/session"
 	"github.com/s3nt3/sqlvine/pkg/generator"
+	"github.com/s3nt3/sqlvine/pkg/schema"
 )
 
 func (v *Revisor) reviseSelectStmt(node *ir.RevNode) {
@@ -85,7 +86,7 @@ func (v *Revisor) walkSelectStmt(node *ir.RevNode) {
 	v.walkFields(node)
 }
 
-func (v *Revisor) walkFrom(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkFrom(node *ir.RevNode) *schema.Table {
 	stmt := node.GetStmt()
 	schema := stmt.GetSchema()
 
@@ -103,12 +104,12 @@ func (v *Revisor) walkFrom(node *ir.RevNode) *session.Table {
 	return table
 }
 
-func (v *Revisor) walkTableRefsClause(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkTableRefsClause(node *ir.RevNode) *schema.Table {
 	join := node.GetChildByNodePtr(node.Node.(*ast.TableRefsClause).TableRefs)
 	return v.walkJoin(join)
 }
 
-func (v *Revisor) walkJoin(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkJoin(node *ir.RevNode) *schema.Table {
 	join := node.Node.(*ast.Join)
 	if join.Left != nil {
 		if join.Right != nil {
@@ -116,7 +117,7 @@ func (v *Revisor) walkJoin(node *ir.RevNode) *session.Table {
 			rtable := v.walkResultSetNode(node.GetChildByNodePtr(join.Right))
 
 			if join.On != nil {
-				v.walkOnCondition(node.GetChildByNodePtr(join.On), []*session.Table{ltable, rtable})
+				v.walkOnCondition(node.GetChildByNodePtr(join.On), []*schema.Table{ltable, rtable})
 			}
 
 			stmt := node.GetStmt()
@@ -135,11 +136,11 @@ func (v *Revisor) walkJoin(node *ir.RevNode) *session.Table {
 	return nil
 }
 
-func (v *Revisor) walkOnCondition(node *ir.RevNode, tables []*session.Table) {
+func (v *Revisor) walkOnCondition(node *ir.RevNode, tables []*schema.Table) {
 	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.OnCondition).Expr), tables, nil)
 }
 
-func (v *Revisor) walkResultSetNode(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkResultSetNode(node *ir.RevNode) *schema.Table {
 	switch node.Node.(type) {
 	case *ast.Join:
 		return v.walkJoin(node)
@@ -155,7 +156,7 @@ func (v *Revisor) walkResultSetNode(node *ir.RevNode) *session.Table {
 	return nil
 }
 
-func (v *Revisor) walkTableName(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkTableName(node *ir.RevNode) *schema.Table {
 	tableName := node.Node.(*ast.TableName)
 	if table, ok := v.schema.TableMap[tableName.Name.String()]; ok {
 		return table
@@ -171,7 +172,7 @@ func (v *Revisor) walkTableName(node *ir.RevNode) *session.Table {
 	return table
 }
 
-func (v *Revisor) walkTableSource(node *ir.RevNode) *session.Table {
+func (v *Revisor) walkTableSource(node *ir.RevNode) *schema.Table {
 	tableSource := node.Node.(*ast.TableSource)
 	table := v.walkResultSetNode(node.GetChildByNodePtr(tableSource.Source))
 
@@ -215,16 +216,16 @@ func (v *Revisor) walkFieldList(node *ir.RevNode, multiCols bool) {
 }
 
 func (v *Revisor) walkSelectField(node *ir.RevNode) {
-	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.SelectField).Expr), []*session.Table{}, nil)
+	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.SelectField).Expr), []*schema.Table{}, nil)
 }
 
 func (v *Revisor) walkWhere(node *ir.RevNode) {
-	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.SelectStmt).Where), []*session.Table{}, nil)
+	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.SelectStmt).Where), []*schema.Table{}, nil)
 }
 
 func (v *Revisor) walkHaving(node *ir.RevNode) {
 	having := node.GetChildByNodePtr(node.Node.(*ast.SelectStmt).Having)
-	v.walkExprNode(having.GetChildByNodePtr(having.Node.(*ast.HavingClause).Expr), []*session.Table{}, nil)
+	v.walkExprNode(having.GetChildByNodePtr(having.Node.(*ast.HavingClause).Expr), []*schema.Table{}, nil)
 }
 
 func (v *Revisor) walkOrderBy(node *ir.RevNode) {
@@ -248,5 +249,5 @@ func (v *Revisor) walkGroupByClause(node *ir.RevNode) {
 }
 
 func (v *Revisor) walkByItem(node *ir.RevNode) {
-	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.ByItem).Expr), []*session.Table{}, nil)
+	v.walkExprNode(node.GetChildByNodePtr(node.Node.(*ast.ByItem).Expr), []*schema.Table{}, nil)
 }
