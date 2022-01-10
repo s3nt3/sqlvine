@@ -1,10 +1,13 @@
-module print
+module plan
 
 go 1.17
 
 replace google.golang.org/grpc v1.43.0 => google.golang.org/grpc v1.29.1
 
-require github.com/s3nt3/sqlvine v0.0.0-20220107161519-3083a74d46d2
+require (
+	github.com/pingcap/tidb v1.1.0-beta.0.20211230064550-e52f49c4aec2
+	github.com/s3nt3/sqlvine v0.0.0-20220107161519-3083a74d46d2
+)
 
 require (
 	cloud.google.com/go v0.93.3 // indirect
@@ -79,7 +82,6 @@ require (
 	github.com/pingcap/kvproto v0.0.0-20211122024046-03abd340988f // indirect
 	github.com/pingcap/log v0.0.0-20211215031037-e024ba4eb0ee // indirect
 	github.com/pingcap/sysutil v0.0.0-20211208032423-041a72e5860d // indirect
-	github.com/pingcap/tidb v1.1.0-beta.0.20211230064550-e52f49c4aec2 // indirect
 	github.com/pingcap/tidb-tools v5.2.2-0.20211019062242-37a8bef2fa17+incompatible // indirect
 	github.com/pingcap/tidb/parser v0.0.0-20211230080750-24e7e5d755a9 // indirect
 	github.com/pingcap/tipb v0.0.0-20211227115224-a06a85f9d2a5 // indirect

@@ -2,29 +2,42 @@ package print
 
 import (
 	"log"
-	"os"
+	"strings"
 )
 
-func fileExist(filename string) bool {
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		return false
-	}
-	return true
-}
-
-func init() {
-	filename := "/tmp/tst.sql"
-
-	logFile, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
-	if err != nil {
-		panic(err)
-	}
-
-	log.SetOutput(logFile)
-	log.SetPrefix("[fuzz]")
-	log.SetFlags(log.LstdFlags | log.Lshortfile | log.LUTC)
-}
-
 func PrintSQL(sql string) {
-	log.Println(sql)
+	if len(sql) < 128 {
+		switch {
+		case strings.Contains(sql, "COUNT("):
+			if strings.Contains(sql, "COUNT((SELECT ") {
+				log.Panicln(sql)
+			} else {
+				log.Println(sql)
+			}
+		case strings.Contains(sql, "SUM("):
+			if strings.Contains(sql, "SUM((SELECT ") {
+				log.Panicln(sql)
+			} else {
+				log.Println(sql)
+			}
+		case strings.Contains(sql, "MAX("):
+			if strings.Contains(sql, "MAX((SELECT ") {
+				log.Panicln(sql)
+			} else {
+				log.Println(sql)
+			}
+		case strings.Contains(sql, "GROUP_CONCAT("):
+			if strings.Contains(sql, "GROUP_CONCAT((SELECT ") {
+				log.Panicln(sql)
+			} else {
+				log.Println(sql)
+			}
+		case strings.Contains(sql, "JSON_OBJECTAGG("):
+			if strings.Contains(sql, "JSON_OBJECTAGG((SELECT ") {
+				log.Panicln(sql)
+			} else {
+				log.Println(sql)
+			}
+		}
+	}
 }

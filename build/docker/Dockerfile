@@ -17,7 +17,7 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y file tmux less vim unzip net-tools
 RUN apt-get install -y libssl-dev libcurl4-openssl-dev
-RUN apt-get install -y git sudo direnv
+RUN apt-get install -y git gdb sudo direnv
 
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go env -w GO111MODULE=on

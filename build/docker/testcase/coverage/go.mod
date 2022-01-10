@@ -1,10 +1,10 @@
-module print
+module coverage
 
 go 1.17
 
 replace google.golang.org/grpc v1.43.0 => google.golang.org/grpc v1.29.1
 
-require github.com/s3nt3/sqlvine v0.0.0-20220107161519-3083a74d46d2
+require github.com/s3nt3/sqlvine v0.0.0-20220107062633-e9bb0d0d0cef
 
 require (
 	cloud.google.com/go v0.93.3 // indirect

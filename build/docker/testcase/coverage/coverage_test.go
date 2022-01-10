@@ -1,9 +1,9 @@
-package print_test
+package coverage_test
 
 import (
 	"testing"
 
-	"print"
+	"coverage"
 
 	"github.com/s3nt3/sqlvine/pkg/mutator"
 	"github.com/s3nt3/sqlvine/pkg/parser"
@@ -32,7 +32,7 @@ func (m *SQLMutator) Unmarshal(sql []byte) error {
 }
 
 func (m *SQLMutator) Marshal() ([]byte, error) {
-	return m.payload, nil
+	return m.sql, nil
 }
 
 func (m *SQLMutator) Mutate() error {
@@ -137,12 +137,12 @@ func (m *SQLMutator) Mutate() error {
 	return nil
 }
 
-func FuzzPrintSQL(f *testing.F) {
+func FuzzCoverage(f *testing.F) {
 	m := NewSQLMutator("SELECT c1 FROM t1;")
 
 	f.Add(m)
 
 	f.Fuzz(func(t *testing.T, m *SQLMutator) {
-		print.PrintSQL(string(m.Payload()))
+		coverage.PrintSQL(string(m.Payload()))
 	})
 }
